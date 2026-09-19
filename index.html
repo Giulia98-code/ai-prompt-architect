@@ -11,12 +11,20 @@
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
 
   <!-- HEADER -->
-  <header class="border-b border-slate-800 p-6 text-center">
-    <span class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Free Utility Tool</span>
+  <header class="border-b border-slate-800 p-6 text-center relative">
+    <!-- SELETTORE LINGUA -->
+    <div class="absolute top-4 right-4">
+      <select id="langSelect" onchange="changeLanguage()" class="bg-slate-800 border border-slate-700 text-xs text-slate-300 rounded px-2 py-1 focus:outline-none">
+        <option value="it">🇮🇹 IT</option>
+        <option value="en">🇬🇧 EN</option>
+      </select>
+    </div>
+
+    <span class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider" id="badgeText">Free Utility Tool</span>
     <h1 class="text-3xl md:text-5xl font-extrabold mt-3 bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
       AI Prompt Architect
     </h1>
-    <p class="text-slate-400 mt-2 text-sm md:text-base max-w-xl mx-auto">
+    <p class="text-slate-400 mt-2 text-sm md:text-base max-w-xl mx-auto" id="subtitleText">
       Genera istantaneamente prompt avanzati e strutturati per Midjourney, ChatGPT e Stable Diffusion.
     </p>
   </header>
@@ -26,11 +34,11 @@
     
     <!-- GENERATORE DI PROMPT (Free Value) -->
     <section class="bg-slate-800/60 border border-slate-700/50 rounded-xl p-6 shadow-xl">
-      <h2 class="text-xl font-bold mb-4 text-slate-200">1. Genera il tuo Prompt Gratuito</h2>
+      <h2 class="text-xl font-bold mb-4 text-slate-200" id="step1Title">1. Genera il tuo Prompt Gratuito</h2>
       
       <div class="space-y-4">
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Seleziona lo Stile / Caso d'Uso:</label>
+          <label class="block text-xs text-slate-400 mb-1" id="selectLabel">Seleziona lo Stile / Caso d'Uso:</label>
           <select id="styleSelect" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm focus:outline-none focus:border-indigo-500">
             <option value="brand">Brand Identity & Logo Minimalista</option>
             <option value="uiux">UI/UX Design Showcase Dashboard</option>
@@ -39,13 +47,13 @@
           </select>
         </div>
 
-        <button onclick="generatePrompt()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg transition-all duration-200 shadow-lg shadow-indigo-600/30">
+        <button onclick="generatePrompt()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg transition-all duration-200 shadow-lg shadow-indigo-600/30" id="generateBtn">
           ⚡ Genera Prompt Ora
         </button>
 
         <div id="resultBox" class="hidden mt-4 p-4 bg-slate-950 border border-slate-800 rounded-lg relative">
           <p id="promptOutput" class="text-sm font-mono text-cyan-300 break-words"></p>
-          <button onclick="copyToClipboard()" class="mt-3 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded transition-all">
+          <button onclick="copyToClipboard()" class="mt-3 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded transition-all" id="copyBtn">
             📋 Copia Prompt
           </button>
         </div>
@@ -57,8 +65,8 @@
       <div class="absolute -right-6 -top-6 bg-indigo-500 text-xs font-bold px-8 py-2 rotate-12 uppercase tracking-widest shadow-md">
         Instant Pack
       </div>
-      <h2 class="text-xl font-bold text-white mb-2">🚀 Serve un livello avanzato?</h2>
-      <p class="text-slate-300 text-sm mb-4">
+      <h2 class="text-xl font-bold text-white mb-2" id="upsellTitle">🚀 Serve un livello avanzato?</h2>
+      <p class="text-slate-300 text-sm mb-4" id="upsellDesc">
         Scarica il **Master Vault di +500 Prompt pronti all'uso** per Branding, UI/UX, Mockup e Strategy + la guida in PDF.
       </p>
       
@@ -69,7 +77,7 @@
         </div>
         <!-- Link Gumroad Overlay -->
         <a class="gumroad-button bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white font-bold py-2.5 px-5 rounded-lg text-sm shadow-md transition-all" 
-           href="https://mazzaartist.gumroad.com/l/mikioi" target="_blank">
+           href="https://mazzaartist.gumroad.com/l/mikioi" target="_blank" id="buyBtn">
           Sblocca il Pack Ora →
         </a>
       </div>
@@ -77,7 +85,7 @@
 
     <!-- MONETIZZAZIONE 2: AFFILIATION / SPONSOR LINK -->
     <section class="border border-slate-800 rounded-xl p-4 bg-slate-900/40 text-center">
-      <p class="text-xs text-slate-400">
+      <p class="text-xs text-slate-400" id="affiliateText">
         Cerchi un tool per generare immagini direttamente da questi prompt? <br>
         <a href="https://your-affiliate-link.com" target="_blank" class="text-indigo-400 underline font-semibold hover:text-indigo-300">
           Provalo gratis su Leonardo.ai / Midjourney Affiliate →
@@ -89,8 +97,8 @@
 
   <!-- FOOTER / MICRO-DONATION -->
   <footer class="border-t border-slate-800 p-6 text-center text-xs text-slate-500 space-y-2">
-    <p>AI Prompt Architect — Realizzato per la ricerca scientifica sull'autonomia delle IA.</p>
-    <p>
+    <p id="footerResearch">AI Prompt Architect — Realizzato per la ricerca scientifica sull'autonomia delle IA.</p>
+    <p id="footerKofi">
       Ti è stato utile il tool gratuito? 
       <a href="https://ko-fi.com" target="_blank" class="text-slate-400 underline hover:text-slate-200">Offrimi un caffè per sostenere il server (Ko-fi)</a>
     </p>
@@ -98,12 +106,69 @@
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
+    const translations = {
+      it: {
+        subtitle: "Genera istantaneamente prompt avanzati e strutturati per Midjourney, ChatGPT e Stable Diffusion.",
+        step1Title: "1. Genera il tuo Prompt Gratuito",
+        selectLabel: "Seleziona lo Stile / Caso d'Uso:",
+        generateBtn: "⚡ Genera Prompt Ora",
+        copyBtn: "📋 Copia Prompt",
+        copiedText: "Prompt copiato negli appunti!",
+        upsellTitle: "🚀 Serve un livello avanzato?",
+        upsellDesc: "Scarica il Master Vault di +500 Prompt pronti all'uso per Branding, UI/UX, Mockup e Strategy + la guida in PDF.",
+        buyBtn: "Sblocca il Pack Ora →",
+        options: [
+          "Brand Identity & Logo Minimalista",
+          "UI/UX Design Showcase Dashboard",
+          "Fotografia Editoriale & Lighting",
+          "Copywriting Strategico per Social Carousel"
+        ]
+      },
+      en: {
+        subtitle: "Instantly generate advanced, structured prompts for Midjourney, ChatGPT, and Stable Diffusion.",
+        step1Title: "1. Generate Your Free Prompt",
+        selectLabel: "Select Style / Use Case:",
+        generateBtn: "⚡ Generate Prompt Now",
+        copyBtn: "📋 Copy Prompt",
+        copiedText: "Prompt copied to clipboard!",
+        upsellTitle: "🚀 Need an advanced level?",
+        upsellDesc: "Get the Master Vault of 500+ ready-to-use Prompts for Branding, UI/UX, Mockups & Strategy + PDF guide.",
+        buyBtn: "Unlock the Pack Now →",
+        options: [
+          "Brand Identity & Minimalist Logo",
+          "UI/UX Design Showcase Dashboard",
+          "Editorial Photography & Lighting",
+          "Strategic Copywriting for Social Carousels"
+        ]
+      }
+    };
+
     const prompts = {
       brand: "Minimalist vector logo for a modern tech startup, geometric shapes, blue and purple gradient color palette, clean typography, white background, high contrast --v 6.0",
       uiux: "Clean UI/UX dashboard design for a financial analytics SaaS, dark mode, vibrant cyan accents, modern card layout, sleek charts, Figma style presentation, highly detailed --ar 16:9",
       photo: "Editorial portrait photography of a creative professional, soft studio lighting, cinematic depth of field, 85mm lens, natural skin tones, minimal aesthetic, 4k resolution",
-      copy: "Agisci come un Senior Copywriter. Scrivi la struttura per un carosello LinkedIn di 5 slide sull'impatto dell'IA nel design. Usa un tono autorevole ma accessibile e includi una CTA finale."
+      copy: "Act as a Senior Copywriter. Write the outline for a 5-slide LinkedIn carousel about the impact of AI on design. Use an authoritative yet accessible tone and include a final CTA."
     };
+
+    function changeLanguage() {
+      const lang = document.getElementById('langSelect').value;
+      const t = translations[lang];
+
+      document.getElementById('subtitleText').innerText = t.subtitle;
+      document.getElementById('step1Title').innerText = t.step1Title;
+      document.getElementById('selectLabel').innerText = t.selectLabel;
+      document.getElementById('generateBtn').innerText = t.generateBtn;
+      document.getElementById('copyBtn').innerText = t.copyBtn;
+      document.getElementById('upsellTitle').innerText = t.upsellTitle;
+      document.getElementById('upsellDesc').innerText = t.upsellDesc;
+      document.getElementById('buyBtn').innerText = t.buyBtn;
+
+      const select = document.getElementById('styleSelect');
+      select.options[0].text = t.options[0];
+      select.options[1].text = t.options[1];
+      select.options[2].text = t.options[2];
+      select.options[3].text = t.options[3];
+    }
 
     function generatePrompt() {
       const selected = document.getElementById('styleSelect').value;
@@ -116,8 +181,9 @@
 
     function copyToClipboard() {
       const text = document.getElementById('promptOutput').innerText;
+      const lang = document.getElementById('langSelect').value;
       navigator.clipboard.writeText(text);
-      alert("Prompt copiato negli appunti!");
+      alert(translations[lang].copiedText);
     }
   </script>
 </body>
