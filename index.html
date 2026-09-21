@@ -5,7 +5,7 @@
         subtitle: "Genera istantaneamente prompt avanzati e strutturati per Midjourney, ChatGPT e Stable Diffusion.",
         step1Title: "1. Seleziona il tuo Caso d'Uso",
         selectLabel: "Scegli la categoria di design:",
-        generateBtn: "⚡ Genera Prompt Architettato",
+        generateBtn: "⚡ Genera Nuovo Prompt Dinamico",
         copyBtn: "📋 Copia Prompt Negli Appunti",
         copiedText: "Prompt copiato con successo!",
         upsellTitle: "🚀 Vuoi l'intero Vault di +500 Prompt?",
@@ -22,7 +22,7 @@
         subtitle: "Instantly generate advanced, structured prompts for Midjourney, ChatGPT, and Stable Diffusion.",
         step1Title: "1. Select Your Use Case",
         selectLabel: "Choose design category:",
-        generateBtn: "⚡ Generate Architected Prompt",
+        generateBtn: "⚡ Generate New Dynamic Prompt",
         copyBtn: "📋 Copy Prompt to Clipboard",
         copiedText: "Prompt copied successfully!",
         upsellTitle: "🚀 Want the full 500+ Prompt Vault?",
@@ -37,15 +37,67 @@
       }
     };
 
-    // 2. PROMPT AD ALTO IMPATTO (Valore Gratuito)
-    const prompts = {
-      brand: "Minimalist vector logo for a high-end tech startup, geometric grid balance, vibrant blue and purple neon gradient, clean Swiss typography, isolated on black background, high contrast, vector style --v 6.0 --style raw",
-      uiux: "Sleek UI/UX dashboard interface for a financial AI analytics platform, dark mode, futuristic glassmorphism elements, cyan and violet glowing data charts, clean typography, 8k resolution, Figma presentation style --ar 16:9",
-      photo: "Editorial fashion portrait, cinematic rim lighting, moody atmosphere, shot on 85mm lens, f/1.8 aperture, subtle film grain, ultra-detailed skin textures, Vogue aesthetic --ar 4:5 --v 6.0",
-      copy: "Act as a Lead UI/UX Strategist. Create a 5-slide LinkedIn carousel framework explaining '5 Micro-interactions that Boost Conversions'. Include slide title, visual hook concept, core copy, and actionable CTA for each slide."
+    // 2. ELEMENTI DINAMICI PER COMPORRE I PROMPT
+    const dynamicData = {
+      brand: {
+        subjects: ["fintech startup", "AI robotics company", "luxury eco-friendly brand", "cybersecurity platform", "modern architecture studio"],
+        styles: ["minimalist geometric vector", "3D glossy glassmorphism logo", "bold line-art emblem", "monogram lettermark"],
+        colors: ["blue and purple neon gradient", "emerald green and gold accents", "monochrome black and white", "pastel orange and cyan"],
+        params: ["--v 6.0 --style raw", "--v 6.0 --ar 1:1", "--v 6.0 --no text fonts"]
+      },
+      uiux: {
+        subjects: ["crypto wallet analytics SaaS", "AI content creation tool", "health & fitness tracking app", "e-commerce admin dashboard"],
+        styles: ["dark mode with frosted glass panels", "clean minimalist neomorphism layout", "high-contrast cyberpunk aesthetic"],
+        colors: ["vibrant cyan and violet glowing accents", "emerald green dark theme", "electric orange and slate gray"],
+        params: ["--ar 16:9 --v 6.0", "--ar 16:9 --style raw"]
+      },
+      photo: {
+        subjects: ["creative director in a modern studio", "tech founder working late", "editorial fashion model"],
+        lighting: ["cinematic rim lighting with soft shadows", "dramatic neon noir ambient light", "natural daylight through blinds"],
+        lenses: ["shot on 85mm lens, f/1.8 aperture", "50mm prime lens, natural depth of field", "35mm street photography style"],
+        params: ["--ar 4:5 --v 6.0", "--ar 16:9 --v 6.0"]
+      },
+      copy: {
+        topics: [
+          "5 Micro-interactions that Boost Conversions",
+          "How to Build a Design System in 2026",
+          "The Future of AI in Product Design",
+          "3 UX Psychology Tricks Every Designer Should Know"
+        ]
+      }
     };
 
-    // 3. FUNZIONI DI INTERAZIONE
+    // FUNZIONE PER ESTRARRE UN ELEMENTO CASUALE
+    function getRandom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // 3. GENERAZIONE DINAMICA DEL PROMPT
+    function generatePrompt() {
+      const selected = document.getElementById('styleSelect').value;
+      const output = document.getElementById('promptOutput');
+      const box = document.getElementById('resultBox');
+      let resultPrompt = "";
+
+      if (selected === 'brand') {
+        const d = dynamicData.brand;
+        resultPrompt = `${getRandom(d.styles)} for a ${getRandom(d.subjects)}, ${getRandom(d.colors)}, clean Swiss typography, isolated on solid background, high contrast ${getRandom(d.params)}`;
+      } else if (selected === 'uiux') {
+        const d = dynamicData.uiux;
+        resultPrompt = `Sleek UI/UX dashboard design for a ${getRandom(d.subjects)}, ${getRandom(d.styles)}, ${getRandom(d.colors)}, clean data visualization cards, Figma presentation style ${getRandom(d.params)}`;
+      } else if (selected === 'photo') {
+        const d = dynamicData.photo;
+        resultPrompt = `Editorial portrait of a ${getRandom(d.subjects)}, ${getRandom(d.lighting)}, ${getRandom(d.lenses)}, high detailed skin texture, Vogue magazine aesthetic ${getRandom(d.params)}`;
+      } else if (selected === 'copy') {
+        const d = dynamicData.copy;
+        resultPrompt = `Act as a Lead UI/UX Strategist. Write a 5-slide LinkedIn carousel outline about '${getRandom(d.topics)}'. Include slide titles, visual layout ideas, concise copy, and a strong call-to-action (CTA).`;
+      }
+
+      output.innerText = resultPrompt;
+      box.classList.remove('hidden');
+    }
+
+    // 4. CAMBIO LINGUA E COPIA
     function changeLanguage() {
       const lang = document.getElementById('langSelect').value;
       const t = translations[lang];
@@ -64,15 +116,6 @@
       select.options[1].text = t.options[1];
       select.options[2].text = t.options[2];
       select.options[3].text = t.options[3];
-    }
-
-    function generatePrompt() {
-      const selected = document.getElementById('styleSelect').value;
-      const output = document.getElementById('promptOutput');
-      const box = document.getElementById('resultBox');
-      
-      output.innerText = prompts[selected];
-      box.classList.remove('hidden');
     }
 
     function copyToClipboard() {
