@@ -1,5 +1,96 @@
-<script>
-    // 1. TRADUZIONI INTERFACCIA
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Prompt Architect — Instant Generator for Creatives</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Gumroad JS per overlay acquisto immediato -->
+  <script src="https://gumroad.com/js/gumroad.js"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+
+  <!-- HEADER -->
+  <header class="border-b border-slate-800 p-6 text-center relative">
+    <!-- SELETTORE LINGUA -->
+    <div class="absolute top-4 right-4">
+      <select id="langSelect" onchange="changeLanguage()" class="bg-slate-800 border border-slate-700 text-xs text-slate-300 rounded px-2 py-1 focus:outline-none cursor-pointer">
+        <option value="it">🇮🇹 IT</option>
+        <option value="en">🇬🇧 EN</option>
+      </select>
+    </div>
+
+    <span class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider" id="badgeText">Free Utility Tool</span>
+    <h1 class="text-3xl md:text-5xl font-extrabold mt-3 bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+      AI Prompt Architect
+    </h1>
+    <p class="text-slate-400 mt-2 text-sm md:text-base max-w-xl mx-auto" id="subtitleText">
+      Genera istantaneamente prompt avanzati e strutturati per Midjourney, ChatGPT e Stable Diffusion.
+    </p>
+  </header>
+
+  <!-- MAIN TOOL SECTION -->
+  <main class="max-w-3xl mx-auto w-full p-6 space-y-8">
+    
+    <!-- GENERATORE DI PROMPT DINAMICO -->
+    <section class="bg-slate-800/60 border border-slate-700/50 rounded-xl p-6 shadow-xl">
+      <h2 class="text-xl font-bold mb-4 text-slate-200" id="step1Title">1. Seleziona il tuo Caso d'Uso</h2>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1" id="selectLabel">Scegli la categoria di design:</label>
+          <select id="styleSelect" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500">
+            <option value="brand">🎨 Brand Identity: Logo Minimal e Vettoriale</option>
+            <option value="uiux">💻 UI/UX Design: Dashboard SaaS Dark Mode</option>
+            <option value="photo">📸 Fotografia Editoriale: Ritratto Cinematico</option>
+            <option value="copy">📱 Social Strategy: Carousel Copywriting Framework</option>
+          </select>
+        </div>
+
+        <button onclick="generatePrompt()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-lg transition-all duration-200 shadow-lg shadow-indigo-600/30" id="generateBtn">
+          ⚡ Genera Nuovo Prompt Dinamico
+        </button>
+
+        <div id="resultBox" class="hidden mt-4 p-4 bg-slate-950 border border-slate-800 rounded-lg relative">
+          <p id="promptOutput" class="text-sm font-mono text-cyan-300 break-words leading-relaxed"></p>
+          <button onclick="copyToClipboard()" class="mt-3 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded transition-all cursor-pointer" id="copyBtn">
+            📋 Copia Prompt Negli Appunti
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MONETIZZAZIONE: UPSELL BUNDLE (Gumroad) -->
+    <section class="bg-gradient-to-br from-indigo-950/40 to-slate-800/80 border border-indigo-500/30 rounded-xl p-6 shadow-2xl relative overflow-hidden">
+      <div class="absolute -right-6 -top-6 bg-indigo-500 text-xs font-bold px-8 py-2 rotate-12 uppercase tracking-widest shadow-md">
+        Instant Pack
+      </div>
+      <h2 class="text-xl font-bold text-white mb-2" id="upsellTitle">🚀 Vuoi l'intero Vault di +500 Prompt?</h2>
+      <p class="text-slate-300 text-sm mb-4" id="upsellDesc">
+        Ottieni l'accesso immediato alla libreria completa con stili per UI/UX, Loghi 3D, Mockup e Strategy Frameworks + Guida PDF.
+      </p>
+      
+      <div class="flex items-center justify-between mt-4">
+        <div>
+          <span class="text-2xl font-extrabold text-indigo-400">€4.99</span>
+          <span class="text-xs text-slate-400 line-through ml-2">€19.99</span>
+        </div>
+        <a class="gumroad-button bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white font-bold py-2.5 px-5 rounded-lg text-sm shadow-md transition-all" 
+           href="https://mazzaartist.gumroad.com/l/mikioi" target="_blank" id="buyBtn">
+          Sblocca il Master Vault (€4.99) →
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800 p-6 text-center text-xs text-slate-500">
+    <p>AI Prompt Architect — Built for designers & creators.</p>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
     const translations = {
       it: {
         subtitle: "Genera istantaneamente prompt avanzati e strutturati per Midjourney, ChatGPT e Stable Diffusion.",
@@ -37,13 +128,12 @@
       }
     };
 
-    // 2. ELEMENTI DINAMICI PER COMPORRE I PROMPT
     const dynamicData = {
       brand: {
         subjects: ["fintech startup", "AI robotics company", "luxury eco-friendly brand", "cybersecurity platform", "modern architecture studio"],
         styles: ["minimalist geometric vector", "3D glossy glassmorphism logo", "bold line-art emblem", "monogram lettermark"],
         colors: ["blue and purple neon gradient", "emerald green and gold accents", "monochrome black and white", "pastel orange and cyan"],
-        params: ["--v 6.0 --style raw", "--v 6.0 --ar 1:1", "--v 6.0 --no text fonts"]
+        params: ["--v 6.0 --style raw", "--v 6.0 --ar 1:1", "--v 6.0"]
       },
       uiux: {
         subjects: ["crypto wallet analytics SaaS", "AI content creation tool", "health & fitness tracking app", "e-commerce admin dashboard"],
@@ -67,12 +157,10 @@
       }
     };
 
-    // FUNZIONE PER ESTRARRE UN ELEMENTO CASUALE
     function getRandom(arr) {
       return arr[Math.floor(Math.random() * arr.length)];
     }
 
-    // 3. GENERAZIONE DINAMICA DEL PROMPT
     function generatePrompt() {
       const selected = document.getElementById('styleSelect').value;
       const output = document.getElementById('promptOutput');
@@ -97,7 +185,6 @@
       box.classList.remove('hidden');
     }
 
-    // 4. CAMBIO LINGUA E COPIA
     function changeLanguage() {
       const lang = document.getElementById('langSelect').value;
       const t = translations[lang];
@@ -125,3 +212,5 @@
       alert(translations[lang].copiedText);
     }
   </script>
+</body>
+</html>
